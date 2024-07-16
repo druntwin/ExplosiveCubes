@@ -26,14 +26,17 @@ public class CubeSpawner : MonoBehaviour
             {
                 newCube.TryGetComponent(out ExplosiveCube explosiveCube);
                 explosiveCube.SetMaxDropChance(explosiveParentCube.MaxDropChance);
+                explosiveCube.UpgradeGeneration(explosiveParentCube.Generation);
 
                 newCube.transform.localScale = explosiveParentCube.transform.localScale / scaleDivider;
             }
 
             Destroy(explosiveParentCube.gameObject);
         }
-
-        _explosion.Explode(explosiveParentCube);
+        else
+        {
+            _explosion.Explode(explosiveParentCube);
+        }
     }
 
     private bool CalculateInstantiateChance(ExplosiveCube explosiveParentCube)

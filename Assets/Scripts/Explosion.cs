@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
-    [SerializeField] private float _explosiveRadius = 2f;
-    [SerializeField] private float _explosiveForce = 200f;
+    [SerializeField] private int _explosiveDeafaultRadius = 1;
+    [SerializeField] private int _explosiveDefaultForce = 100;
+
+    private int _explosiveRadius = 1;
 
     public void Explode(ExplosiveCube explosiveParentCube)
     {
+        int explosiveForce = _explosiveDefaultForce * explosiveParentCube.Generation;
+
+        _explosiveRadius = _explosiveDeafaultRadius * explosiveParentCube.Generation;
+
         foreach (Rigidbody explodableObject in GetExplodibleObjects(explosiveParentCube))
         {
-            explodableObject.AddExplosionForce(_explosiveForce, explosiveParentCube.transform.position, _explosiveRadius);
+            explodableObject.AddExplosionForce(explosiveForce, explosiveParentCube.transform.position, _explosiveRadius);
         }
 
         Destroy(explosiveParentCube.gameObject);
