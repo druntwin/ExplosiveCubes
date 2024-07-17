@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +13,7 @@ public class CubeSpawner : MonoBehaviour
     {
         List<Rigidbody> childrenCubes = new();
 
-        if (CalculateInstantiateChance(explosiveParentCube))
+        if (CalculateChance(explosiveParentCube))
         {
             int newCubesCount = Random.Range(_minNewCubesCount, _maxNewCubesCount);
             int scaleDivider = 2;
@@ -39,14 +38,11 @@ public class CubeSpawner : MonoBehaviour
         }
     }
 
-    private bool CalculateInstantiateChance(ExplosiveCube explosiveParentCube)
+    private bool CalculateChance(ExplosiveCube explosiveParentCube)
     {
         int fullDropChancePercent = 100;
         int currentDropChance = Random.Range(0, fullDropChancePercent + 1);
 
-        if (currentDropChance <= explosiveParentCube.MaxDropChance)
-            return true;
-
-        return false;
+        return currentDropChance <= explosiveParentCube.MaxDropChance;
     }
 }

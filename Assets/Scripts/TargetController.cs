@@ -1,11 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(CubeSpawner))]
 public class TargetController : MonoBehaviour
 {
-    [SerializeField] private CubeSpawner _cubeSpawner;
-    
+    private CubeSpawner _cubeSpawner;
+
+    private void Awake()
+    {
+        _cubeSpawner = GetComponent<CubeSpawner>();
+    }
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -14,7 +18,7 @@ public class TargetController : MonoBehaviour
 
             if(Physics.Raycast(ray, out RaycastHit hitInfo))
             {
-                hitInfo.collider.gameObject.TryGetComponent(out ExplosiveCube explosiveCube);                
+                hitInfo.collider.TryGetComponent(out ExplosiveCube explosiveCube);                
 
                 if (explosiveCube != null)
                 {
