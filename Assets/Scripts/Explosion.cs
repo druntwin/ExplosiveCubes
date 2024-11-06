@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Explosion : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class Explosion : MonoBehaviour
 
     private int _explosiveRadius = 1;
 
-    public void Explode(ExplosiveCube explosiveParentCube)
+    public void Explode(ExplosiveCube explosiveParentCube, bool isSpawn)
     {
         int explosiveForce = _explosiveDefaultForce * explosiveParentCube.Generation;
 
@@ -16,7 +17,14 @@ public class Explosion : MonoBehaviour
 
         foreach (Rigidbody explodableObject in GetExplodibleObjects(explosiveParentCube))
         {
-            explodableObject.AddExplosionForce(explosiveForce, explosiveParentCube.transform.position, _explosiveRadius);
+            if (isSpawn)
+            {
+                explodableObject.AddExplosionForce(_explosiveDefaultForce, explosiveParentCube.transform.position, _explosiveDeafaultRadius);
+            }
+            else
+            {
+                explodableObject.AddExplosionForce(explosiveForce, explosiveParentCube.transform.position, _explosiveRadius);
+            }
         }
 
         Destroy(explosiveParentCube.gameObject);
@@ -25,17 +33,6 @@ public class Explosion : MonoBehaviour
     private List<Rigidbody> GetExplodibleObjects(ExplosiveCube explosiveParentCube)
     {
         Collider[] hits = Physics.OverlapSphere(explosiveParentCube.transform.position, _explosiveRadius);
-
-        List<Rigidbody> cubes = new();
-
-        foreach (Collider hit in hits)
-        {
-            if (hit.attachedRigidbody != null)
-            {
-                cubes.Add(hit.attachedRigidbody);
-            }
-        }
-
-        return cubes;
+        return hits.Where(hit => hit.attachedRigidbody != null).Select(hit => hit.attachedRigidbody).ToList();
     }
 }

@@ -22,7 +22,7 @@ public class ExplosiveCube : MonoBehaviour
         _maxDropChance = parentDropChance / dropChanceDivider;
     }
 
-    public void UpgradeGeneration(int parentGeneration)
+    public void SetGeneration(int parentGeneration)
     {
         Generation = parentGeneration + 1;
     }

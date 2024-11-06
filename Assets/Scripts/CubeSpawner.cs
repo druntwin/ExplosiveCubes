@@ -12,8 +12,9 @@ public class CubeSpawner : MonoBehaviour
     public void InstantiateNewCubes(ExplosiveCube explosiveParentCube)
     {
         List<Rigidbody> childrenCubes = new();
+        bool isSpawn = CalculateChance(explosiveParentCube);
 
-        if (CalculateChance(explosiveParentCube))
+        if (isSpawn)
         {
             int newCubesCount = Random.Range(_minNewCubesCount, _maxNewCubesCount);
             int scaleDivider = 2;
@@ -25,16 +26,16 @@ public class CubeSpawner : MonoBehaviour
             {
                 newCube.TryGetComponent(out ExplosiveCube explosiveCube);
                 explosiveCube.SetMaxDropChance(explosiveParentCube.MaxDropChance);
-                explosiveCube.UpgradeGeneration(explosiveParentCube.Generation);
+                explosiveCube.SetGeneration(explosiveParentCube.Generation);
 
                 newCube.transform.localScale = explosiveParentCube.transform.localScale / scaleDivider;
             }
 
-            Destroy(explosiveParentCube.gameObject);
+            _explosion.Explode(explosiveParentCube, isSpawn);
         }
         else
         {
-            _explosion.Explode(explosiveParentCube);
+            _explosion.Explode(explosiveParentCube, isSpawn);
         }
     }
 
